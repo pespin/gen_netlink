@@ -530,6 +530,7 @@ encode_uint64(NlaType, Val) ->
 encode_huint16(NlaType, Val) ->
 	enc_nla(NlaType, <<Val:16/native-integer>>).
 encode_huint32(NlaType, Val) ->
+    lager:error("encode_huint32: ~p ~p~n", [NlaType, Val]),
 	enc_nla(NlaType, <<Val:32/native-integer>>).
 encode_huint64(NlaType, Val) ->
     enc_nla(NlaType, <<Val:64/native-integer>>).
@@ -777,6 +778,7 @@ nl_enc_payload(rtnetlink, MsgType, {Family, DstLen, SrcLen, Tos, Table, Protocol
 
 nl_enc_payload(rtnetlink, MsgType, {Family, Type, Index, Flags, Change, Req})
   when MsgType == newlink; MsgType == dellink; MsgType == getlink ->
+    netlink:debug("nl_enc_payload(rtnetlink): ~p~n", [Req]),
 	Fam = gen_socket:family(Family),
 	Type0 = gen_socket:arphdr(Type),
 	Flags0 = encode_iff_flags(Flags),
